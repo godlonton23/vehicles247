@@ -6,5 +6,7 @@
     <color name="colorAccent">#00000000</color>
     <color name="colorTextPrimary">#fff</color>
     <color name="colorTextSecondary">#fff</color>
+    <color name="ColorPrimary">#00DAF7</color>
+    <color name="ColorPrimaryDark">#E64A19</color>
 
 </resources>

@@ -6,6 +6,7 @@ import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     private ArrayList<VehicleData> al;
     private SwipeFlingAdapterView flingContainer;
 
+    private Toolbar toolbar;
+
     public static void removeBackground() {
         viewHolder.background.setVisibility(View.GONE);
         myAppAdapter.notifyDataSetChanged();
@@ -53,6 +56,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         setContentView(R.layout.activity_main);
 
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        //
+        toolbar.setTitle("Vehicles 24/7");
+        //
+        setSupportActionBar(toolbar);
 
         al = new ArrayList<VehicleData>();
         new JSONAsyncTask().execute("http://empty-bush-3943.getsandbox.com/listings");
