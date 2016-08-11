@@ -62,6 +62,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         //
         setSupportActionBar(toolbar);
 
+        toolbar.setNavigationIcon(R.drawable.heart);
+        toolbar.setSubtitle("My likes");
+
+        //toolbar.setNavigationOnClickListener();
+
         al = new ArrayList<VehicleData>();
         new JSONAsyncTask().execute("http://empty-bush-3943.getsandbox.com/listings");
 
