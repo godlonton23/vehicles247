@@ -29,6 +29,7 @@ import android.widget.ListView;
 public class LikedVehiclesActivity extends Activity {
 
     ArrayList<VehicleData> vehicleList;
+    ArrayList<String> myIdList = new ArrayList<String>();
 
     DataAdapter adapter;
 
@@ -47,7 +48,8 @@ public class LikedVehiclesActivity extends Activity {
 
         toolbar.setNavigationIcon(R.drawable.heart);
         //
-        // setSupportActionBar(toolbar);
+        Bundle b=this.getIntent().getExtras();
+        myIdList=b.getStringArrayList("array");
 
         ListView listview = (ListView)findViewById(R.id.list);
         adapter = new DataAdapter(getApplicationContext(), R.layout.row,vehicleList);
@@ -101,23 +103,21 @@ public class LikedVehiclesActivity extends Activity {
                     JSONArray jarray = jsono.getJSONArray("data");
 
                     for (int i = 0; i < jarray.length(); i++) {
+                        //if (myIdList.get(i).equals(vehicleList.get(i).getId())){
                         JSONObject object = jarray.getJSONObject(i);
-
                         VehicleData dataObj = new VehicleData();
-
                         dataObj.setTitle(object.getString("title"));
                         dataObj.setId(object.getString("id"));
                         dataObj.setPrice(object.getString("price"));
                         dataObj.setYear(object.getString("year"));
                         dataObj.setDefault_image(object.getString("default_image"));
-
                         vehicleList.add(dataObj);
+
+
                     }
                     return true;
                 }
-
                 //------------------>>
-
             } catch (ParseException e1) {
                 e1.printStackTrace();
             } catch (IOException e) {
