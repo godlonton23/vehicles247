@@ -11,8 +11,18 @@ public class VehicleData {
 
     private String default_image;
 
+    private String price;
+
     public VehicleData() {
 
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public String getId() {

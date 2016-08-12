@@ -2,6 +2,7 @@ package com.godlontonconsulting.vehicles247;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -59,13 +60,20 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         //
         toolbar.setTitle("Vehicles 24/7");
-        //
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationIcon(R.drawable.heart);
         toolbar.setSubtitle("My likes");
 
-        //toolbar.setNavigationOnClickListener();
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LikedVehiclesActivity.class);
+                //intent.putExtra("id", id.getName());
+                MainActivity.this.finish();
+                startActivity(intent);
+            }
+        });
 
         al = new ArrayList<VehicleData>();
         new JSONAsyncTask().execute("http://empty-bush-3943.getsandbox.com/listings");
@@ -85,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-
+                Toast.makeText(MainActivity.this, "Id = "+"swiped and liked.", Toast.LENGTH_LONG).show();
             }
 
             @Override
