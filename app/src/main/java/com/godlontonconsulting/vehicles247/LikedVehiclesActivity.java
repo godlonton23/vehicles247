@@ -18,12 +18,11 @@ import android.app.ProgressDialog;
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
 
 public class LikedVehiclesActivity extends Activity {
@@ -31,7 +30,7 @@ public class LikedVehiclesActivity extends Activity {
     ArrayList<VehicleData> vehicleList;
     ArrayList<String> myIdList = new ArrayList<String>();
 
-    DataAdapter adapter;
+    private DataAdapter adapter;
 
     private Toolbar toolbar;
 
@@ -51,20 +50,14 @@ public class LikedVehiclesActivity extends Activity {
         Bundle b=this.getIntent().getExtras();
         myIdList=b.getStringArrayList("array");
 
-        ListView listview = (ListView)findViewById(R.id.list);
-        adapter = new DataAdapter(getApplicationContext(), R.layout.row,vehicleList);
-
-        listview.setAdapter(adapter);
-
-        listview.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-                                    long id) {
-                // TODO Auto-generated method stub
-                Toast.makeText(getApplicationContext(), vehicleList.get(position).getTitle(), Toast.LENGTH_LONG).show();
-            }
-        });
+        RecyclerView recView = (RecyclerView) findViewById(R.id.list);
+        DefaultItemAnimator itemAnimator = new DefaultItemAnimator();
+        recView.setHasFixedSize(true);
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(LikedVehiclesActivity.this);
+        recView.setLayoutManager(mLinearLayoutManager);
+        recView.setItemAnimator(itemAnimator);
+        adapter = new DataAdapter(LikedVehiclesActivity.this,vehicleList);
+        recView.setAdapter(adapter);
     }
 
 
@@ -77,7 +70,7 @@ public class LikedVehiclesActivity extends Activity {
             super.onPreExecute();
             dialog = new ProgressDialog(LikedVehiclesActivity.this);
             dialog.setMessage("Loading, please wait");
-            dialog.setTitle("Connecting server");
+            dialog.setTitle("Connecting to server.");
             dialog.show();
             dialog.setCancelable(false);
         }
@@ -112,7 +105,24 @@ public class LikedVehiclesActivity extends Activity {
                         dataObj.setYear(object.getString("year"));
                         dataObj.setDefault_image(object.getString("default_image"));
                         vehicleList.add(dataObj);
+                        //
 
+//                        String dataId=object.getString("id").toString();
+//                        String likedId=myIdList.get(i).toString();
+//
+//                        boolean liked = dataId.equals(likedId);
+//
+//                        //if(liked){
+//                            vehicleList.add(dataObj);
+//                       // }
+                        //vehicleList.add(dataObj);
+                        //}
+                        //for(int j=0;j<myIdList.size();j++){
+                        //if((object.getString("id").equals(myIdList.get(i)))){
+                        // vehicleList.add(dataObj);
+                        // break;
+                        // }
+                        //}
 
                     }
                     return true;
@@ -132,7 +142,7 @@ public class LikedVehiclesActivity extends Activity {
             dialog.cancel();
             adapter.notifyDataSetChanged();
             if(result == false)
-                Toast.makeText(getApplicationContext(), "Unable to fetch data from server", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Unable to fetch data from server. No connection.", Toast.LENGTH_LONG).show();
 
         }
     }

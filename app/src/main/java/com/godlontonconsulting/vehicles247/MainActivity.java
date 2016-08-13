@@ -202,9 +202,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             viewHolder.DataText.setText("Year: "+al.get(position).getYear());
-
             viewHolder.txtCarTitle.setText(al.get(position).getTitle());
-
             Glide.with(MainActivity.this).load(al.get(position).getDefault_image()).into(viewHolder.cardImage);
 
             return rowView;
@@ -220,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             super.onPreExecute();
             dialog = new ProgressDialog(MainActivity.this);
             dialog.setMessage("Loading, please wait");
-            dialog.setTitle("Connecting server");
+            dialog.setTitle("Connecting to server.");
             dialog.show();
             dialog.setCancelable(false);
         }

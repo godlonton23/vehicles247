@@ -1,100 +1,85 @@
 package com.godlontonconsulting.vehicles247;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.util.Log;
+import android.app.Activity;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.io.InputStream;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
-//import butterknife.BindView;
-//import butterknife.ButterKnife;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class DataAdapter extends ArrayAdapter<VehicleData> {
+public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 	//
 	ArrayList<VehicleData> vehicleList;
-	LayoutInflater vi;
-	int Resource;
-	ViewHolder holder;
+	Activity activity;
 
-	public DataAdapter(Context context, int resource, ArrayList<VehicleData> objects) {
-		super(context, resource, objects);
-		vi = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		Resource = resource;
-		vehicleList = objects;
+	public DataAdapter(Activity activity,ArrayList<VehicleData> objects) {
+		this.activity=activity;
+		this.vehicleList = objects;
 	}
-	
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		// convert view = design
-		View v = convertView;
-		if (v == null) {
-			holder = new ViewHolder();
-			v = vi.inflate(Resource, null);
-			holder.imageview = (ImageView) v.findViewById(R.id.ivImage);
-			holder.tvTitle = (TextView) v.findViewById(R.id.tvTitle);
-			holder.tvPrice = (TextView) v.findViewById(R.id.tvPrice);
-			holder.tvYear = (TextView) v.findViewById(R.id.tvYear);
-			v.setTag(holder);
-		} else {
-			holder = (ViewHolder) v.getTag();
+
+	public static class ViewHolder extends RecyclerView.ViewHolder {
+		public ViewHolder(View v) {
+			super(v);
 		}
+	}
+
+	//
+	public class VehiclesViewHolder extends ViewHolder {
+
+		@BindView(R.id.ivImage) ImageView imageview;
+		@BindView(R.id.tvTitle) TextView tvTitle ;
+		@BindView(R.id.tvPrice) TextView tvPrice;
+		@BindView(R.id.tvYear) TextView tvYear;
+
+		public VehiclesViewHolder(View view) {
+			super(view);
+			ButterKnife.bind(this, view);
+		}
+	}
+	//
+	@Override
+	public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+		//
+		View v;
+		//
+		v =  LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row, viewGroup, false);
+		return new VehiclesViewHolder(v);
+		//
+	}
+
+	@Override
+	public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+		//
+		final VehiclesViewHolder holder = (VehiclesViewHolder) viewHolder;
 		holder.imageview.setImageResource(R.drawable.ic_imageholder);
-		new DownloadImageTask(holder.imageview).execute(vehicleList.get(position).getDefault_image());
+		final String imagePath=vehicleList.get(position).getDefault_image();
+		Picasso.with(activity).load(imagePath).resize(540, 0).networkPolicy(NetworkPolicy.OFFLINE, NetworkPolicy.NO_CACHE).placeholder(R.drawable.ic_imageholder).into(holder.imageview, new com.squareup.picasso.Callback() {
+			@Override
+			public void onSuccess() {
+				Picasso.with(activity).load(imagePath).resize(540, 0).placeholder(R.drawable.ic_imageholder).into(holder.imageview);
+			}
+
+			@Override
+			public void onError() {
+				Picasso.with(activity).load(imagePath).resize(540, 0).placeholder(R.drawable.ic_imageholder).into(holder.imageview);
+			}
+		});
+
 		holder.tvTitle.setText(vehicleList.get(position).getTitle());
 		holder.tvPrice.setText("Price: "+vehicleList.get(position).getPrice()+" ZAR");
  		holder.tvYear.setText("Year: " + vehicleList.get(position).getYear());
-		return v;
-
 	}
 
-	static class ViewHolder {
-		public ImageView imageview;
-		public TextView tvTitle;
-		public TextView tvPrice;
-		public TextView tvYear;
-
-		// TODO  butterknife //
-//		@BindView(R.id.ivImage) TextView imageview;
-//		@BindView(R.id.tvTitle) TextView tvTitle;
-//
-//		public ViewHolder(View view) {
-//			ButterKnife.bind(this, view);
-//		}
+	@Override
+	public int getItemCount() {
+		return this.vehicleList.size();
 	}
 
-	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-		ImageView bmImage;
-
-		public DownloadImageTask(ImageView bmImage) {
-			this.bmImage = bmImage;
-		}
-
-		protected Bitmap doInBackground(String... urls) {
-			String urldisplay = urls[0];
-			Bitmap mIcon11 = null;
-			try {
-				InputStream in = new java.net.URL(urldisplay).openStream();
-				mIcon11 = BitmapFactory.decodeStream(in);
-			} catch (Exception e) {
-				Log.e("Error", e.getMessage());
-				e.printStackTrace();
-			}
-			return mIcon11;
-		}
-
-		protected void onPostExecute(Bitmap result) {
-			bmImage.setImageBitmap(result);
-		}
-
-	}
 }
