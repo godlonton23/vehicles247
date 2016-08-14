@@ -16,10 +16,10 @@ import butterknife.ButterKnife;
 
 public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 	//
-	ArrayList<VehicleData> vehicleList;
+	ArrayList<ParcelableData> vehicleList ;
 	Activity activity;
 
-	public DataAdapter(Activity activity,ArrayList<VehicleData> objects) {
+	public DataAdapter(Activity activity,ArrayList< ParcelableData> objects) {
 		this.activity=activity;
 		this.vehicleList = objects;
 	}
@@ -59,7 +59,7 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 		//
 		final VehiclesViewHolder holder = (VehiclesViewHolder) viewHolder;
 		holder.imageview.setImageResource(R.drawable.ic_imageholder);
-		final String imagePath=vehicleList.get(position).getDefault_image();
+		final String imagePath=vehicleList.get(position).default_image;
 		Picasso.with(activity).load(imagePath).resize(540, 0).networkPolicy(NetworkPolicy.OFFLINE, NetworkPolicy.NO_CACHE).placeholder(R.drawable.ic_imageholder).into(holder.imageview, new com.squareup.picasso.Callback() {
 			@Override
 			public void onSuccess() {
@@ -72,9 +72,9 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			}
 		});
 
-		holder.tvTitle.setText(vehicleList.get(position).getTitle());
-		holder.tvPrice.setText("Price: "+vehicleList.get(position).getPrice()+" ZAR");
- 		holder.tvYear.setText("Year: " + vehicleList.get(position).getYear());
+		holder.tvTitle.setText(vehicleList.get(position).title);
+		holder.tvPrice.setText("Price: "+vehicleList.get(position).price+" ZAR");
+ 		holder.tvYear.setText("Year: " + vehicleList.get(position).year);
 	}
 
 	@Override

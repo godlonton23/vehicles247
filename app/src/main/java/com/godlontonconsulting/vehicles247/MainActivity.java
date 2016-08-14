@@ -42,14 +42,11 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     public static MyAppAdapter myAppAdapter;
     public static ViewHolder viewHolder;
     private ArrayList<VehicleData> al;
+    public static ArrayList<ParcelableData> idList = new ArrayList<ParcelableData>();
+
     private SwipeFlingAdapterView flingContainer;
-    private String cardId;
 
     private Toolbar toolbar;
-
-    private int incrementer=0;
-
-    ArrayList<String> myIdList = new ArrayList<String>();
 
     public static void removeBackground() {
         viewHolder.background.setVisibility(View.GONE);
@@ -74,10 +71,8 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle b=new Bundle();
-                b.putStringArrayList("array", myIdList);
                 Intent intent = new Intent(MainActivity.this, LikedVehiclesActivity.class);
-                intent.putExtras(b);
+                //intent.putExtra("idArray", idList);
                 MainActivity.this.finish();
                 startActivity(intent);
             }
@@ -96,11 +91,15 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
             @Override
             public void onLeftCardExit(Object dataObject) {
-                cardId=al.get(0).getId();
-                myIdList.add(cardId);
-
-                //Toast.makeText(MainActivity.this, "Id = "+cardId+" swiped and liked.", Toast.LENGTH_LONG).show();
-
+                //
+                ParcelableData dataObj = new ParcelableData();
+                dataObj.title=al.get(0).getTitle();
+                dataObj.year=al.get(0).getYear();
+                dataObj.default_image=al.get(0).getDefault_image();
+                dataObj.price=al.get(0).getPrice();
+                dataObj.id=al.get(0).getId();
+                idList.add(dataObj);
+                //
                 al.remove(0);
                 myAppAdapter.notifyDataSetChanged();
             }
@@ -250,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
                         dataObj.setTitle(object.getString("title"));
                         dataObj.setYear(object.getString("year"));
+                        dataObj.setPrice(object.getString("price"));
                         dataObj.setDefault_image(object.getString("default_image"));
                         dataObj.setId(object.getString("id"));
 
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             dialog.cancel();
             myAppAdapter.notifyDataSetChanged();
             if(result == false)
-                Toast.makeText(getApplicationContext(), "Unable to fetch data from server", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Unable to fetch data from server. Connection problem - please try again.", Toast.LENGTH_LONG).show();
 
         }
     }
