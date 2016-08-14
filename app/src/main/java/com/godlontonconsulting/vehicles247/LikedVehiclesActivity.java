@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.godlontonconsulting.vehicles247.adapter.DataAdapter;
 import com.godlontonconsulting.vehicles247.model.ParcelableData;
@@ -34,6 +35,10 @@ public class LikedVehiclesActivity extends AppCompatActivity {
         //ArrayList<ParcelableData> myIdList =  b.getParcelable("idArray");
 
         ArrayList<ParcelableData> myIdList = MainActivity.idList;
+
+        if (myIdList.size()<=0){
+            Toast.makeText(getApplicationContext(), "No liked vehicles chosen. Go back and choose a few cars.", Toast.LENGTH_LONG).show();
+        }
 
         RecyclerView recView = (RecyclerView) findViewById(R.id.list);
         DefaultItemAnimator itemAnimator = new DefaultItemAnimator();

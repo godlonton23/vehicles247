@@ -11,6 +11,37 @@
         layout="@layout/tool_bar"
         ></include>
     <!-- activity view -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/lnrConProblem"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Unable to connect due to a connectivity problem. Please try again and reload."
+            android:id="@+id/textView"
+            android:layout_gravity="center"
+            android:textColor="#000000"
+            android:layout_margin="15dp"
+            android:textAlignment="center"
+            android:gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reload Data"
+            android:id="@+id/btnReload"
+            android:layout_gravity="center"
+            android:textColor="#000000"
+            android:layout_margin="10dp" />
+
+    </LinearLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
 

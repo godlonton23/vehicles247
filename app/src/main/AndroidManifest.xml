@@ -25,6 +25,7 @@
             android:name=".LikedVehiclesActivity"
             android:label="LikedVehiclesActivity" >
         </activity>
+
     </application>
 
 </manifest>

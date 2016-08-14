@@ -2,12 +2,15 @@ package com.godlontonconsulting.vehicles247;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,8 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements FlingCardListener.ActionDownInterface {
+public class MainActivity extends AppCompatActivity implements FlingCardListener.ActionDownInterface, View.OnClickListener {
 
     public static MyAppAdapter myAppAdapter;
     public static ViewHolder viewHolder;
@@ -51,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     private SwipeFlingAdapterView flingContainer;
 
     private Toolbar toolbar;
+    private LinearLayout lnrConProblem;
+    private Button btnReload;
 
     public static void removeBackground() {
         viewHolder.background.setVisibility(View.GONE);
@@ -68,8 +75,12 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         toolbar.setTitle("Vehicles 24/7");
         setSupportActionBar(toolbar);
 
+        lnrConProblem = (LinearLayout) findViewById(R.id.lnrConProblem);
+        btnReload = (Button) findViewById(R.id.btnReload);
+        btnReload.setOnClickListener(this);
+
         al = new ArrayList<VehicleData>();
-        new JSONAsyncTask().execute("http://empty-bush-3943.getsandbox.com/listings");
+        fetchData();
 
         myAppAdapter = new MyAppAdapter(al, MainActivity.this);
         flingContainer.setAdapter(myAppAdapter);
@@ -128,6 +139,16 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             }
         });
 
+    }
+    //
+    @Override
+    public void onClick(View v) {
+            fetchData();
+    }
+    //
+    public void fetchData(){
+        lnrConProblem.setVisibility(View.GONE);
+        new JSONAsyncTask().execute("http://empty-bush-3943.getsandbox.com/listings");
     }
 
     // Menu icons are inflated just as they were with actionbar
@@ -283,9 +304,10 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         protected void onPostExecute(Boolean result) {
             dialog.cancel();
             myAppAdapter.notifyDataSetChanged();
-            if(result == false)
+            if(result == false) {
                 Toast.makeText(getApplicationContext(), "Unable to fetch data from server. Connection problem - please try again.", Toast.LENGTH_LONG).show();
-
+                lnrConProblem.setVisibility(View.VISIBLE);
+            }
         }
     }
 }
