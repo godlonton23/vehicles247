@@ -1,4 +1,4 @@
-package com.godlontonconsulting.vehicles247;
+package com.godlontonconsulting.vehicles247.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

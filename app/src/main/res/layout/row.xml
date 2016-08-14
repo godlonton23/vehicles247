@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_imageholder"
+            android:src="@drawable/imageholder"
             android:layout_gravity="left" />
 
     </LinearLayout>

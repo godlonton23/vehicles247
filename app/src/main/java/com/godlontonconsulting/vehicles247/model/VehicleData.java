@@ -1,4 +1,4 @@
-package com.godlontonconsulting.vehicles247;
+package com.godlontonconsulting.vehicles247.model;
 
 
 public class VehicleData {

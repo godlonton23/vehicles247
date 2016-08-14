@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -19,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.godlontonconsulting.vehicles247.model.ParcelableData;
+import com.godlontonconsulting.vehicles247.model.VehicleData;
 import com.godlontonconsulting.vehicles247.tindercard.FlingCardListener;
 import com.godlontonconsulting.vehicles247.tindercard.SwipeFlingAdapterView;
 
@@ -59,24 +63,10 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         setContentView(R.layout.activity_main);
 
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        //
         toolbar.setTitle("Vehicles 24/7");
-        //
         setSupportActionBar(toolbar);
-
-        toolbar.setNavigationIcon(R.drawable.heart);
-        toolbar.setSubtitle("My likes");
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LikedVehiclesActivity.class);
-                //intent.putExtra("idArray", idList);
-                MainActivity.this.finish();
-                startActivity(intent);
-            }
-        });
 
         al = new ArrayList<VehicleData>();
         new JSONAsyncTask().execute("http://empty-bush-3943.getsandbox.com/listings");
@@ -127,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         });
 
 
-        // Optionally add an OnItemClickListener
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
@@ -139,6 +128,28 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
             }
         });
 
+    }
+
+    // Menu icons are inflated just as they were with actionbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_mainbarhome, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_Liked:
+                Intent intent = new Intent(MainActivity.this, LikedVehiclesActivity.class);
+               //intent.putExtra("idArray", idList);
+                MainActivity.this.finish();
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -183,7 +194,6 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         public View getView(final int position, View convertView, ViewGroup parent) {
 
             View rowView = convertView;
-
 
             if (rowView == null) {
 
