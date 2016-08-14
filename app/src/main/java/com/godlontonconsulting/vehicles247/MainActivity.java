@@ -4,9 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +32,8 @@ import com.godlontonconsulting.vehicles247.model.ParcelableData;
 import com.godlontonconsulting.vehicles247.model.VehicleData;
 import com.godlontonconsulting.vehicles247.tindercard.FlingCardListener;
 import com.godlontonconsulting.vehicles247.tindercard.SwipeFlingAdapterView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -42,6 +46,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
     public static MyAppAdapter myAppAdapter;
     public static ViewHolder viewHolder;
-    private ArrayList<VehicleData> al;
+    private ArrayList<VehicleData> al = new ArrayList<VehicleData>();
     public static ArrayList<ParcelableData> idList = new ArrayList<ParcelableData>();
 
     private SwipeFlingAdapterView flingContainer;
@@ -79,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
         btnReload = (Button) findViewById(R.id.btnReload);
         btnReload.setOnClickListener(this);
 
-        al = new ArrayList<VehicleData>();
         fetchData();
 
         myAppAdapter = new MyAppAdapter(al, MainActivity.this);
@@ -147,8 +151,20 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
     }
     //
     public void fetchData(){
+        // check shared preferences //
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString("SavedData", null);
+        Type type = new TypeToken<ArrayList<VehicleData>>() {}.getType();
+        ArrayList<VehicleData> arrayObjectList = arrayObjectList=gson.fromJson(json, type);
+        //
+        if (arrayObjectList==null){
+            new JSONAsyncTask().execute("http://empty-bush-3943.getsandbox.com/listings");
+        }else{
+            al=arrayObjectList;
+        }
+        //
         lnrConProblem.setVisibility(View.GONE);
-        new JSONAsyncTask().execute("http://empty-bush-3943.getsandbox.com/listings");
     }
 
     // Menu icons are inflated just as they were with actionbar
@@ -286,6 +302,14 @@ public class MainActivity extends AppCompatActivity implements FlingCardListener
 
                         al.add(dataObj);
                     }
+                    //
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(al);
+                    editor.putString("SavedData", json);
+                    editor.commit();
+                    //
                     return true;
                 }
 

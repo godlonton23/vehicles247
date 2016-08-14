@@ -29,6 +29,8 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.0.0'
     compile 'com.jakewharton:butterknife:8.2.1'
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
-    // Pinch and zoom
+    // Pinch and zoom //
     compile 'it.sephiroth.android.library.imagezoom:imagezoom:+'
+    //
+    compile 'com.google.http-client:google-http-client-gson:1.19.0'
 }
